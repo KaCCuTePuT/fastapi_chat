@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from db import database, metadata, engine
 
-from user.routers import user_router
-from chat.api import chat_router
 
+from user.routers import user_router
+from conversations.api import conv_router
+from messages.api import message_router
 app = FastAPI()
+
 
 metadata.create_all(engine)
 app.state.database = database
@@ -24,6 +26,6 @@ async def shutdown() -> None:
         await database_.disconnect()
 
 app.include_router(user_router)
-app.include_router(chat_router)
-
+app.include_router(conv_router)
+app.include_router(message_router)
 
