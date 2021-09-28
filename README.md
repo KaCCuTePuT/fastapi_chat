@@ -11,7 +11,6 @@
 
 ### Используемый стек на данный момент:
 * Fastapi
-* Fastapi_users
 * Ormar
 * Hypercon
 * Vue (чуть позже)
