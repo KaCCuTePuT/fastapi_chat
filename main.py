@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from db import database, metadata, engine
 
 
-from user.routers import user_router
+from user.api import user_router
 from conversations.api import conv_router
 from messages.api import message_router
 app = FastAPI()

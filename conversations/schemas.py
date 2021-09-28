@@ -5,12 +5,12 @@ from pydantic import BaseModel, UUID4
 
 
 class UserForChat(BaseModel):
-    id: UUID4
-    username: str
+    id: int
+    username: Optional[str] = None
 
 
 class UserForMessage(BaseModel):
-    id: UUID4
+    id: int
 
 
 class MessagesForConvs(BaseModel):

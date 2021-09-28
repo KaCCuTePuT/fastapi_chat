@@ -1,21 +1,20 @@
-from fastapi_users import models
+from pydantic import BaseModel
+from typing import Any, Optional
 
 
-class User(models.BaseUser):
-    username: str
+class UserCreate(BaseModel):
     phone: str
+    verification_code1: str
+    verification_code2: str
 
 
-class UserCreate(models.BaseUserCreate):
-    username: str
+class UserOut(BaseModel):
+    id: int
+    username: Optional[str] = None
     phone: str
-    code: int
+    avatar: str
+    is_superuser: Any
 
 
-class UserUpdate(User, models.BaseUserUpdate):
-    pass
-
-
-class UserDB(User, models.BaseUserDB):
-    pass
-
+class TokenPayload(BaseModel):
+    user_id: int = None

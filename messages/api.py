@@ -1,6 +1,6 @@
 from fastapi import Depends, APIRouter
 
-from user.routers import fastapi_users
+from user.services import get_current_user
 from user.models import User
 from .models import Message
 from .schemas import MessageCreate
@@ -15,13 +15,13 @@ message_router = APIRouter(prefix='/message', tags=['chat'])
 async def create_message(
         conv_id,
         msg: MessageCreate,
-        user: User = Depends(fastapi_users.current_user())
+        user: User = Depends(get_current_user)
 ):
     my_conv = await Conversation.objects.prefetch_related('users').get(id=conv_id)
     list_of_id = [u['id'] for u in my_conv.dict()['users']]
-    if user.id in list_of_id:
+    if user.user_id in list_of_id:
         await Message.objects.create(
-            user=user.id,
+            user=user.user_id,
             text=msg.text,
             conversation=msg.conversation
         )

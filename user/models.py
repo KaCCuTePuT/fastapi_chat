@@ -1,17 +1,14 @@
 import ormar
 
-from fastapi_users.db import OrmarBaseUserModel, OrmarUserDatabase
-
 from db import MainMeta
-from user.schemas import UserDB
 
 
-class User(OrmarBaseUserModel):
+class User(ormar.Model):
     class Meta(MainMeta):
         pass
 
-    username = ormar.String(unique=True, nullable=False, max_length=100)
-    phone = ormar.String(unique=True, nullable=False, min_length=11, max_length=11)
-
-
-user_db = OrmarUserDatabase(UserDB, User)
+    id: int = ormar.Integer(primary_key=True)
+    username: str = ormar.String(max_length=100, unique=True, nullable=True)
+    phone: str = ormar.String(max_length=12, unique=True)
+    avatar = ormar.String(max_length=500, nullable=True)
+    is_superuser = ormar.Boolean(default=False, nullable=False)
