@@ -2,6 +2,7 @@ from fastapi import Depends, APIRouter
 
 from user.services import get_current_user
 from user.models import User
+from services import is_conv_member
 from .models import Message
 from .schemas import MessageCreate
 from conversations.models import Conversation
@@ -18,8 +19,7 @@ async def create_message(
         user: User = Depends(get_current_user)
 ):
     my_conv = await Conversation.objects.prefetch_related('users').get(id=conv_id)
-    list_of_id = [u['id'] for u in my_conv.dict()['users']]
-    if user.user_id in list_of_id:
+    if is_conv_member(user, my_conv):
         await Message.objects.create(
             user=user.user_id,
             text=msg.text,
