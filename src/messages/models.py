@@ -2,8 +2,8 @@ import ormar
 import datetime
 
 from db import MainMeta
-from user.models import User
-from conversations.models import Conversation
+from src.user.models import User
+from src.conversations.models import Conversation
 
 
 class Message(ormar.Model):

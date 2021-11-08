@@ -12,8 +12,7 @@ class UserOut(BaseModel):
     id: int
     username: Optional[str] = None
     phone: str
-    avatar: str
-    is_superuser: Any
+    avatar: Optional[str] = None
 
 
 class TokenPayload(BaseModel):

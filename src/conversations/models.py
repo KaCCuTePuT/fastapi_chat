@@ -3,7 +3,7 @@ import ormar
 from typing import List
 
 from db import MainMeta
-from user.models import User
+from src.user.models import User
 
 
 class Conversation(ormar.Model):
