@@ -1,12 +1,13 @@
-import datetime
-from typing import Optional, List
+from datetime import datetime
+from typing import Optional
 
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel
 
 
 class UserForChat(BaseModel):
     id: int
     username: Optional[str] = None
+    phone: str
 
 
 class UserForMessage(BaseModel):
@@ -16,15 +17,15 @@ class UserForMessage(BaseModel):
 class MessagesForConvs(BaseModel):
     text: str
     user: UserForChat
-    date_created: datetime.datetime
+    date_created: datetime
 
 
 class ConversationOut(BaseModel):
     id: Optional[int] = None
     title: str
     description: str
-    users: List[UserForChat]
-    messages: List[MessagesForConvs]
+    users: list[UserForChat]
+    messages: list[MessagesForConvs]
 
 
 class ConversationCreate(BaseModel):

@@ -1,5 +1,5 @@
 import pytest
-import settings
+from config import test_settings
 from httpx import AsyncClient
 
 
@@ -9,7 +9,7 @@ async def test_creating_conv_without_token():
         "title": "testTitle",
         "description": "testDesc"
     }
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
         response = await ac.post('/conv/create', json=data)
     assert response.status_code == 401
 
@@ -20,8 +20,8 @@ async def test_creating_conv_with_token():
         "title": "testTitle",
         "description": "testDesc"
     }
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
-        token_response = await ac.post('/auth', json=settings.DATA_FOR_GETTING_TOKEN1)
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
+        token_response = await ac.post('/auth', json=test_settings.DATA_FOR_GETTING_TOKEN1)
         token = token_response.json().get('access_token')
         headers = {
             'Authorization': f'Bearer {token}'
@@ -33,15 +33,15 @@ async def test_creating_conv_with_token():
 
 @pytest.mark.asyncio
 async def test_retrieving_conv_without_token():
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
         response = await ac.post('/conv/retrieve/1')
     assert response.status_code == 401
 
 
 @pytest.mark.asyncio
 async def test_retrieving_conv_with_token():
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
-        token_response = await ac.post('/auth', json=settings.DATA_FOR_GETTING_TOKEN1)
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
+        token_response = await ac.post('/auth', json=test_settings.DATA_FOR_GETTING_TOKEN1)
         token = token_response.json().get('access_token')
         headers = {
             'Authorization': f'Bearer {token}'
@@ -52,8 +52,8 @@ async def test_retrieving_conv_with_token():
 
 @pytest.mark.asyncio
 async def test_retrieving_conv_by_non_creator():
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
-        token_response = await ac.post('/auth', json=settings.DATA_FOR_GETTING_TOKEN2)
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
+        token_response = await ac.post('/auth', json=test_settings.DATA_FOR_GETTING_TOKEN2)
         token = token_response.json().get('access_token')
         headers = {
             'Authorization': f'Bearer {token}'
@@ -69,8 +69,8 @@ async def test_updating_conv_by_non_creator():
         "title": "testTitleUpdate",
         "description": "testDescUpdate"
     }
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
-        token_response = await ac.post('/auth', json=settings.DATA_FOR_GETTING_TOKEN2)
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
+        token_response = await ac.post('/auth', json=test_settings.DATA_FOR_GETTING_TOKEN2)
         token = token_response.json().get('access_token')
         headers = {
             'Authorization': f'Bearer {token}'
@@ -86,7 +86,7 @@ async def test_updating_conv_without_token():
         "title": "testTitleUpdate",
         "description": "testDescUpdate"
     }
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
         response = await ac.put('/conv/update/1', json=data)
     assert response.status_code == 401
 
@@ -97,8 +97,8 @@ async def test_updating_conv():
         "title": "testTitleUpdate",
         "description": "testDescUpdate"
     }
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
-        token_response = await ac.post('/auth', json=settings.DATA_FOR_GETTING_TOKEN1)
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
+        token_response = await ac.post('/auth', json=test_settings.DATA_FOR_GETTING_TOKEN1)
         token = token_response.json().get('access_token')
         headers = {
             'Authorization': f'Bearer {token}'

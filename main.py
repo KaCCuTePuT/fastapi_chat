@@ -1,15 +1,23 @@
 from fastapi import FastAPI
-from db import database, metadata, engine
+from fastapi.middleware.cors import CORSMiddleware
+from db import database
 
 
+from config.base_settings import ORIGINS
 from src.user.api import user_router
 from src.conversations.api import conv_router
-from src.messages.api import message_router
 from src.friends.api import friends_router
 
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ORIGINS,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*']
+)
 
 # metadata.create_all(engine)
 app.state.database = database
@@ -30,6 +38,5 @@ async def shutdown() -> None:
 
 app.include_router(user_router)
 app.include_router(conv_router)
-app.include_router(message_router)
 app.include_router(friends_router)
 

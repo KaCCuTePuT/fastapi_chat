@@ -1,7 +1,8 @@
 import pytest
 from httpx import AsyncClient
 
-import settings
+from config import test_settings
+
 
 # В тестовой бд уже есть 2 пользователя
 
@@ -10,7 +11,7 @@ async def test_adding_friend_without_token():
     data = {
         "phone": "70009998877"
     }
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
         response_creating_message = await ac.post('/friends/add', json=data)
     assert response_creating_message.status_code == 401
 
@@ -20,8 +21,8 @@ async def test_adding_friend_does_not_exist():
     data = {
         "phone": "70009998800"
     }
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
-        token_response = await ac.post('/auth', json=settings.DATA_FOR_GETTING_TOKEN1)
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
+        token_response = await ac.post('/auth', json=test_settings.DATA_FOR_GETTING_TOKEN1)
         token = token_response.json().get('access_token')
         headers = {
             'Authorization': f'Bearer {token}'
@@ -35,8 +36,8 @@ async def test_adding_me_as_friend():
     data = {
         "phone": "79991234567"
     }
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
-        token_response = await ac.post('/auth', json=settings.DATA_FOR_GETTING_TOKEN1)
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
+        token_response = await ac.post('/auth', json=test_settings.DATA_FOR_GETTING_TOKEN1)
         token = token_response.json().get('access_token')
         headers = {
             'Authorization': f'Bearer {token}'
@@ -50,8 +51,8 @@ async def test_adding_friend():
     data = {
         "phone": "70009998877"
     }
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
-        token_response = await ac.post('/auth', json=settings.DATA_FOR_GETTING_TOKEN1)
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
+        token_response = await ac.post('/auth', json=test_settings.DATA_FOR_GETTING_TOKEN1)
         token = token_response.json().get('access_token')
         headers = {
             'Authorization': f'Bearer {token}'
@@ -66,8 +67,8 @@ async def test_adding_friend_that_is_already_friend():
     data = {
         "phone": "70009998877"
     }
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
-        token_response = await ac.post('/auth', json=settings.DATA_FOR_GETTING_TOKEN1)
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
+        token_response = await ac.post('/auth', json=test_settings.DATA_FOR_GETTING_TOKEN1)
         token = token_response.json().get('access_token')
         headers = {
             'Authorization': f'Bearer {token}'
@@ -78,7 +79,7 @@ async def test_adding_friend_that_is_already_friend():
 
 @pytest.mark.asyncio
 async def test_getting_friend_list_without_token():
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
         response_adding_friend = await ac.post('/friends/me',)
     assert response_adding_friend.status_code == 401
 
@@ -86,8 +87,8 @@ async def test_getting_friend_list_without_token():
 @pytest.mark.asyncio
 async def test_getting_friend_list():
 
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
-        token_response = await ac.post('/auth', json=settings.DATA_FOR_GETTING_TOKEN1)
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
+        token_response = await ac.post('/auth', json=test_settings.DATA_FOR_GETTING_TOKEN1)
         token = token_response.json().get('access_token')
         headers = {
             'Authorization': f'Bearer {token}'
@@ -98,15 +99,15 @@ async def test_getting_friend_list():
 
 @pytest.mark.asyncio
 async def test_deleting_friend_without_token():
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
         response_deleting_friend = await ac.delete('/friends/delete/1')
     assert response_deleting_friend.status_code == 401
 
 
 @pytest.mark.asyncio
 async def test_deleting_friend_():
-    async with AsyncClient(**settings.HTTPX_CLIENT_SETTINGS) as ac:
-        token_response = await ac.post('/auth', json=settings.DATA_FOR_GETTING_TOKEN1)
+    async with AsyncClient(**test_settings.HTTPX_CLIENT_SETTINGS) as ac:
+        token_response = await ac.post('/auth', json=test_settings.DATA_FOR_GETTING_TOKEN1)
         token = token_response.json().get('access_token')
         headers = {
             'Authorization': f'Bearer {token}'
