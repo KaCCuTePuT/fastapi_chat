@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from db import database
-
+from db import database, metadata, engine
 
 from config.base_settings import ORIGINS
 from src.user.api import user_router
