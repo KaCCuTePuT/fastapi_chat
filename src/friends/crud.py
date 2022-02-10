@@ -20,6 +20,7 @@ class CRUDFriend:
             raise HTTPException(status_code=400, detail='Этот пользователь уже есть у вас в друзьях')
         else:
             await Friend.objects.create(user=user.user_id, friend=my_friend)
+            await Friend.objects.create(user=my_friend, friend=user.user_id)
         return f'Вы добавили {friend.phone} в друзья'
 
     @staticmethod

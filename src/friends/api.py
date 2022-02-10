@@ -19,8 +19,8 @@ async def add_friend(
     my_user = await User.objects.get(id=user.user_id)
     my_friend = await User.objects.get(phone=friend.phone)
     new_conv = await Conversation.objects.create(
-        title=friend.phone,
-        description=friend.phone,
+        title=f'Беседа между {my_user.phone} и {my_friend.phone}',
+        description=f'Беседа между {my_user.phone} и {my_friend.phone}',
         creator=my_user
     )
     await new_conv.users.add(my_user)
@@ -28,7 +28,7 @@ async def add_friend(
 
 
 @friends_router.delete('/delete/{db_id}', status_code=200)
-async def add_friend(
+async def delete_friend(
         db_id,
         user: User = Depends(get_current_user)
 ):

@@ -26,22 +26,23 @@ async def create_conversation(
     return f'Беседа {conv.title} была создана'
 
 
-@conv_router.websocket("/ws/{conv_id}/{token}")
+@conv_router.websocket("/ws/{phone}/{token}")
 async def conversation_websocket(
         websocket: WebSocket,
-        conv_id: int,
+        phone: str,
         token: str,
 ):
     user = get_current_websocket_user(token)
+    my_conv = await Conversation.objects.select_related(['messages__user', 'users']).get(title__contains=phone)
 
-    await manager.connect(conv_id, user, websocket)
+    await manager.connect(my_conv, user, websocket)
     try:
         while True:
             message_text = await websocket.receive_text()
             await Message.objects.create(
                 user=user.user_id,
                 text=message_text,
-                conversation=conv_id
+                conversation=my_conv.id
             )
             await manager.broadcast()
 

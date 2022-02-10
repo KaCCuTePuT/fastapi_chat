@@ -10,13 +10,12 @@ class ConnectionManager:
     def __init__(self):
         self.active_connections: dict[WebSocket] = dict()
 
-    async def connect(self, conv_id, user, websocket: WebSocket):
+    async def connect(self, my_conv, user, websocket: WebSocket):
         await websocket.accept()
         if user.user_id not in self.active_connections:
             self.active_connections.update({user.user_id: websocket})
-        my_conv = await Conversation.objects.select_related(['messages__user', 'users']).get(id=conv_id)
         if Permission.is_conv_member(user, my_conv):
-            messages = await Message.objects.select_related('user').all(conversation=conv_id)
+            messages = await Message.objects.select_related('user').all(conversation=my_conv.id)
             await websocket.send_json(jsonable_encoder(messages))
 
     def disconnect(self, user):
